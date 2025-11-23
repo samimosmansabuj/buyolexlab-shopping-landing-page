@@ -1,63 +1,132 @@
-
 // thumbnail gallery: swap main image
+// (function () {
+//     const card = document.getElementById('card3d');
+//     let bounds = null;
+
+//     function updateBounds() {
+//         if (card) bounds = card.getBoundingClientRect();
+//     }
+//     updateBounds();
+//     window.addEventListener('resize', updateBounds);
+
+//     function applyTilt(x, y) {
+//         if (!bounds || !card) return;
+//         const px = (x - bounds.left) / bounds.width - 0.5;
+//         const py = (y - bounds.top) / bounds.height - 0.5;
+//         const rotY = px * 12;
+//         const rotX = -py * 8;
+//         card.style.transform = `perspective(900px) rotateY(${rotY}deg) rotateX(${rotX}deg)`;
+//     }
+
+//     function resetTilt() {
+//         if (card) card.style.transform = 'perspective(900px) rotateY(0deg) rotateX(0deg)';
+//     }
+
+//     window.addEventListener('pointermove', (e) => {
+//         if (!bounds) return;
+//         if (e.clientX < bounds.left - 120 || e.clientX > bounds.right + 120) {
+//             resetTilt();
+//             return;
+//         }
+//         applyTilt(e.clientX, e.clientY);
+//     });
+//     window.addEventListener('pointerleave', resetTilt);
+//     window.addEventListener('touchstart', (e) => {
+//         const t = e.touches[0]; if (!t) return;
+//         applyTilt(t.clientX, t.clientY);
+//     }, { passive: true });
+//     window.addEventListener('touchmove', (e) => {
+//         const t = e.touches[0]; if (!t) return;
+//         applyTilt(t.clientX, t.clientY);
+//     }, { passive: true });
+//     window.addEventListener('touchend', resetTilt);
+// })();
+
+// image slider: auto + arrow + swipe
 (function () {
-    const thumbs = document.querySelectorAll('.thumb');
-    const mainMedia = document.querySelector('.main-media');
+    const track = document.getElementById('imageSliderTrack');
+    const dotsContainer = document.getElementById('imageSliderDots');
+    const prevBtn = document.querySelector('.slider-nav.prev');
+    const nextBtn = document.querySelector('.slider-nav.next');
 
-    thumbs.forEach(t => {
-        t.addEventListener('click', () => {
-            const src = t.getAttribute('data-src');
-            if (src && mainMedia) {
-                mainMedia.innerHTML = `<img id="activeMedia" src="${src}" alt="ZENXONE view"/>`;
-            }
-        });
-        t.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                t.click();
-            }
-        });
+    if (!track) return;
+
+    const slides = Array.from(track.children);
+    let index = 0;
+
+    // create dots
+    slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = i === 0 ? 'active' : '';
+        dot.setAttribute('aria-label', 'Go to image ' + (i + 1));
+        dot.addEventListener('click', () => goTo(i));
+        dotsContainer.appendChild(dot);
     });
 
-    // 3D tilt for the visible main card
-    const card = document.getElementById('card3d');
-    let bounds = null;
-    function updateBounds() {
-        if (card) bounds = card.getBoundingClientRect();
-    }
-    updateBounds();
-    window.addEventListener('resize', updateBounds);
+    const dots = Array.from(dotsContainer.children);
 
-    function applyTilt(x, y) {
-        if (!bounds || !card) return;
-        const px = (x - bounds.left) / bounds.width - 0.5;
-        const py = (y - bounds.top) / bounds.height - 0.5;
-        const rotY = px * 12;
-        const rotX = -py * 8;
-        card.style.transform = `perspective(900px) rotateY(${rotY}deg) rotateX(${rotX}deg)`;
-    }
-    function resetTilt() {
-        if (card) card.style.transform = 'perspective(900px) rotateY(0deg) rotateX(0deg)';
+    function update() {
+        track.style.transform = `translateX(-${index * 100}%)`;
+        dots.forEach((d, i) => d.classList.toggle('active', i === index));
     }
 
-    window.addEventListener('pointermove', (e) => {
-        if (!bounds) return;
-        if (e.clientX < bounds.left - 120 || e.clientX > bounds.right + 120) {
-            resetTilt();
-            return;
+    function goTo(i) {
+        index = (i + slides.length) % slides.length;
+        update();
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', () => goTo(index - 1));
+    if (nextBtn) nextBtn.addEventListener('click', () => goTo(index + 1));
+
+    // auto slide: 2 seconds
+    let auto = setInterval(() => goTo(index + 1), 2000);
+
+    // pause on user interaction
+    [track, prevBtn, nextBtn, dotsContainer].forEach(el => {
+        if (!el) return;
+        el.addEventListener('pointerdown', () => {
+            if (auto) {
+                clearInterval(auto);
+                auto = null;
+            }
+        }, { once: true });
+    });
+
+    // swipe support (হাতে slide)
+    let startX = null;
+    let isTouching = false;
+
+    track.addEventListener('touchstart', e => {
+        const t = e.touches[0];
+        if (!t) return;
+        startX = t.clientX;
+        isTouching = true;
+    }, { passive: true });
+
+    track.addEventListener('touchmove', e => {
+        // চাইলে future এ live drag ইফেক্ট করতে পারো
+    }, { passive: true });
+
+    track.addEventListener('touchend', e => {
+        if (!isTouching || startX === null) return;
+        const endX = e.changedTouches[0].clientX;
+        const dx = endX - startX;
+        const threshold = 40; // কতটা swipe করলে slide হবে
+        if (dx > threshold) {
+            goTo(index - 1); // swipe right → previous
+        } else if (dx < -threshold) {
+            goTo(index + 1); // swipe left → next
         }
-        applyTilt(e.clientX, e.clientY);
+        isTouching = false;
+        startX = null;
     });
-    window.addEventListener('pointerleave', resetTilt);
-    window.addEventListener('touchstart', (e) => {
-        const t = e.touches[0]; if (!t) return;
-        applyTilt(t.clientX, t.clientY);
-    }, { passive: true });
-    window.addEventListener('touchmove', (e) => {
-        const t = e.touches[0]; if (!t) return;
-        applyTilt(t.clientX, t.clientY);
-    }, { passive: true });
-    window.addEventListener('touchend', resetTilt);
+
+    // window resize এ ঠিকঠাক রাখতে চাইলে
+    window.addEventListener('resize', update);
+
+    // initial position
+    update();
 })();
 
 // video play (both top + mobile) using same logic

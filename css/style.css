@@ -69,6 +69,9 @@ body {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+    background-color: #0d00003b;
+    padding: 13px;
+    border-radius: 12px;
 }
 
 .brand {
@@ -185,42 +188,96 @@ body {
     box-shadow: 0 18px 60px rgba(15, 23, 42, 0.85);
 }
 
-.thumbs {
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
-    overflow: auto;
-    padding-bottom: 2px;
+/* image slider inside main-media */
+.slider{
+  position:relative;
+  overflow:hidden;
 }
 
-.thumb {
-    min-width: 82px;
-    height: 62px;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 1px solid var(--glass-border);
-    flex: 0 0 auto;
-    position: relative;
-    cursor: pointer;
-    transition: transform 0.16s ease-out, box-shadow 0.16s ease-out, border-color 0.16s ease-out;
+.slider-track{
+  display:flex;
+  transition:transform 0.4s ease-out;
+  will-change:transform;
 }
 
-.thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.slide{
+  flex:0 0 100%;
 }
 
-.thumb:focus-visible {
-    outline: 3px solid rgba(124, 58, 237, 0.5);
-    outline-offset: 3px;
+.slide img{
+  width:100%;
+  height:auto;
+  display:block;
+  object-fit:cover;
 }
 
-.thumb:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.8);
-    border-color: rgba(148, 163, 184, 0.6);
+/* arrow buttons */
+.slider-nav{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:28px;
+  height:28px;
+  border-radius:999px;
+  border:none;
+  background:rgba(15,23,42,0.85);
+  color:rgba(248,250,252,0.92);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(15,23,42,0.8);
+  transition:background 0.16s ease-out, transform 0.16s ease-out;
 }
+
+.slider-nav.prev{ left:10px; }
+.slider-nav.next{ right:10px; }
+
+.slider-nav:hover{
+  background:rgba(59,130,246,0.95);
+  transform:translateY(-50%) translateY(-1px);
+}
+
+/* dots */
+.slider-dots{
+  position:absolute;
+  left:50%;
+  bottom:10px;
+  transform:translateX(-50%);
+  display:flex;
+  gap:6px;
+}
+
+.slider-dots button{
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  border:none;
+  background:rgba(255,255,255,0.25);
+  cursor:pointer;
+}
+
+.slider-dots button.active{
+  background:var(--accent1);
+  width:18px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* video demo card */
 .video-card {
@@ -735,6 +792,10 @@ body {
 
     .main-media {
         height: 420px
+    }
+    .slide img{
+        height:100%;
+        object-fit:cover;
     }
 
     .thumb {
