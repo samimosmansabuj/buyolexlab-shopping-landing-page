@@ -136,7 +136,8 @@
 
     thumbs.forEach(thumb => {
         function loadVideo() {
-            const videoUrl = thumb.getAttribute('data-video') || 'https://www.youtube.com/embed/iL_dkXYraXM';
+            // const videoUrl = thumb.getAttribute('data-video') || 'https://www.youtube.com/embed/iL_dkXYraXM';
+            const videoUrl = thumb.getAttribute('data-video');
             const wrapper = document.createElement('div');
             wrapper.style.position = 'relative';
             wrapper.style.paddingTop = '56.25%';
@@ -147,12 +148,22 @@
             const iframe = document.createElement('iframe');
             iframe.width = '100%';
             iframe.height = '100%';
-            iframe.src = videoUrl + '?autoplay=1&rel=0';
-            iframe.title = 'ZenXOne demo video';
-            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-            iframe.allowFullscreen = true;
+            iframe.setAttribute('src', videoUrl + '?autoplay=1');
+            iframe.setAttribute('title', 'ZenXOne demo video');
+            iframe.setAttribute(
+                'allow',
+                'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+            );
+            iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+            iframe.setAttribute('allowfullscreen', '');
             iframe.style.position = 'absolute';
             iframe.style.inset = '0';
+            
+            // iframe.src = videoUrl + '?autoplay=1';
+            // iframe.title = 'ZenXOne demo video';
+            // iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+            // iframe.referrerpolicy = 'strict-origin-when-cross-origin';
+            // iframe.allowFullscreen = true;
 
             wrapper.appendChild(iframe);
             thumb.replaceWith(wrapper);
@@ -209,6 +220,35 @@
     [track, prevBtn, nextBtn, dotsContainer].forEach(el => {
         if (!el) return;
         el.addEventListener('pointerdown', () => { clearInterval(auto); auto = null; }, { once: true });
+    });
+
+    // swipe support (হাতে slide)
+    let startX = null;
+    let isTouching = false;
+
+    track.addEventListener('touchstart', e => {
+        const t = e.touches[0];
+        if (!t) return;
+        startX = t.clientX;
+        isTouching = true;
+    }, { passive: true });
+
+    track.addEventListener('touchmove', e => {
+        // চাইলে future এ live drag ইফেক্ট করতে পারো
+    }, { passive: true });
+
+    track.addEventListener('touchend', e => {
+        if (!isTouching || startX === null) return;
+        const endX = e.changedTouches[0].clientX;
+        const dx = endX - startX;
+        const threshold = 40; // কতটা swipe করলে slide হবে
+        if (dx > threshold) {
+            goTo(index - 1); // swipe right → previous
+        } else if (dx < -threshold) {
+            goTo(index + 1); // swipe left → next
+        }
+        isTouching = false;
+        startX = null;
     });
 
     window.addEventListener('resize', update);

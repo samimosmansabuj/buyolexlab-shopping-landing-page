@@ -266,19 +266,6 @@ body {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* video demo card */
 .video-card {
     background: linear-gradient(145deg, rgba(148, 163, 184, 0.05), rgba(15, 23, 42, 0.9));
@@ -471,39 +458,6 @@ body {
     opacity: 0.95
 }
 
-/* specs & features grid */
-.specs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    margin-top: 8px
-}
-
-.spec {
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.02), transparent);
-    padding: 7px;
-    border-radius: 8px;
-    border: 1px solid var(--glass-border);
-    font-weight: 700;
-    font-size: 11px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 6px;
-    transition: transform 0.16s ease-out, box-shadow 0.16s ease-out, border-color 0.16s ease-out;
-}
-
-.spec span {
-    font-size: 10px;
-    opacity: 0.7;
-    font-weight: 500;
-}
-
-.spec:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.7);
-    border-color: rgba(148, 163, 184, 0.7);
-}
 
 /* generic section block */
 .section-block {
@@ -529,112 +483,168 @@ body {
     opacity: 0.85;
 }
 
-/* testimonial slider */
-.testi-slider {
-    position: relative;
-    overflow: hidden;
-    border-radius: 16px;
-    border: 1px solid var(--glass-border);
-    padding: 10px 4px 14px;
-    background: radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.12), transparent),
-        radial-gradient(circle at 100% 100%, rgba(129, 140, 248, 0.16), rgba(15, 23, 42, 0.96));
+/* TESTIMONIAL / What parents say */
+.testi-slider{
+  position:relative;
+  overflow:hidden;
+  border-radius:16px;
+  border:1px solid var(--glass-border);
+  padding:10px 8px 14px;
+  background:radial-gradient(circle at 0 0,rgba(56,189,248,0.10),transparent),
+             radial-gradient(circle at 100% 100%,rgba(129,140,248,0.14),rgba(15,23,42,0.96));
 }
 
-.testi-track {
-    display: flex;
-    gap: 8px;
-    transition: transform 0.4s ease-out;
-    will-change: transform;
+.testi-track{
+  display:flex;
+  gap:10px;
+  transition:transform 0.4s ease-out;
+  will-change:transform;
 }
 
-.testi-card {
-    min-width: 88%;
-    max-width: 88%;
-    background: linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.94));
-    padding: 10px;
-    border-radius: 12px;
-    border: 1px solid rgba(148, 163, 184, 0.45);
-    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
-    font-size: 12px;
-    position: relative;
+/* মোবাইলে একবারে ১টা কার্ড */
+.testi-card{
+  min-width:60%;
+  max-width:60%;
+  background:linear-gradient(160deg,rgba(15,23,42,0.98),rgba(15,23,42,0.94));
+  border-radius:12px;
+  border:1px solid rgba(148,163,184,0.45);
+  padding:10px 11px;
+  box-shadow:0 10px 24px rgba(15,23,42,0.9);
+  font-size:12px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
 }
 
-.testi-quote-mark {
-    position: absolute;
-    top: 6px;
-    right: 8px;
-    font-size: 16px;
-    opacity: 0.18;
+/* উপরের অংশ: avatar + নাম + role ছোট ব্যাজ */
+.testi-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
 }
 
-.testi-name {
-    margin-top: 8px;
-    font-size: 11px;
-    opacity: 0.9;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+.testi-person{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  min-width:0;
 }
 
-.testi-name span {
-    width: 20px;
-    height: 20px;
-    border-radius: 999px;
-    background: radial-gradient(circle at 30% 20%, var(--accent1), var(--accent2));
-    display: inline-block;
+.testi-avatar{
+  width:26px;
+  height:26px;
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  font-weight:800;
+  background:radial-gradient(circle at 0 0,var(--accent1),var(--accent2));
+  color:#021026;
+  box-shadow:0 8px 22px rgba(56,189,248,0.4);
+  flex-shrink:0;
 }
 
-.testi-nav {
-    position: absolute;
-    inset-inline: 6px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    justify-content: space-between;
-    pointer-events: none;
+.testi-meta{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
 }
 
-.testi-btn {
-    pointer-events: auto;
-    width: 24px;
-    height: 24px;
-    border-radius: 999px;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    background: rgba(15, 23, 42, 0.82);
-    color: rgba(226, 232, 240, 0.92);
-    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.9);
-    cursor: pointer;
-    transition: background 0.15s ease-out, transform 0.15s ease-out;
+.testi-name-line{
+  font-weight:700;
+  font-size:12px;
+  color:#e5e7eb;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
-.testi-btn:hover {
-    background: rgba(30, 64, 175, 0.9);
-    transform: translateY(-1px);
+.testi-name-line span{
+  opacity:0.75;
+  font-weight:500;
+  font-size:11px;
 }
 
-.dots {
-    display: flex;
-    gap: 6px;
-    justify-content: center;
-    margin-top: 8px;
+.testi-stars{
+  font-size:11px;
+  letter-spacing:1px;
+  color:#facc15;
 }
 
-.dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.14);
-    cursor: pointer;
-    border: none;
+.testi-tag{
+  font-size:10px;
+  padding:3px 7px;
+  border-radius:999px;
+  border:1px solid rgba(148,163,184,0.5);
+  background:rgba(15,23,42,0.9);
+  white-space:nowrap;
+  color:rgba(226,232,240,0.95);
 }
 
-.dot.active {
-    background: var(--accent1);
-    width: 16px;
+/* quote টেক্সট */
+.testi-quote{
+  margin:0;
+  margin-top:4px;
+  font-size:12px;
+  line-height:1.5;
+  opacity:0.92;
+}
+
+/* arrow nav */
+.testi-nav{
+  position:absolute;
+  inset-inline:6px;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;
+  justify-content:space-between;
+  pointer-events:none;
+}
+
+.testi-btn{
+  pointer-events:auto;
+  width:24px;
+  height:24px;
+  border-radius:999px;
+  border:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  background:rgba(15,23,42,0.85);
+  color:rgba(226,232,240,0.92);
+  box-shadow:0 8px 16px rgba(15,23,42,0.9);
+  cursor:pointer;
+  transition:background 0.15s ease-out, transform 0.15s ease-out;
+}
+
+.testi-btn:hover{
+  background:rgba(30,64,175,0.95);
+  transform:translateY(-50%) translateY(-1px);
+}
+
+/* dots নিচে */
+.testi-dots{
+  display:flex;
+  gap:6px;
+  justify-content:center;
+  margin-top:8px;
+}
+
+.testi-dots button{
+  width:7px;
+  height:7px;
+  border-radius:999px;
+  border:none;
+  background:rgba(255,255,255,0.18);
+  cursor:pointer;
+}
+
+.testi-dots button.active{
+  background:var(--accent1);
+  width:16px;
 }
 
 /* extra feature grids */
@@ -816,14 +826,19 @@ body {
     }
 
     .testi-card {
-        min-width: 33.33%;
-        max-width: 33.33%;
+        min-width: 20.33%;
+        max-width: 20.33%;
     }
 }
 
 @media(min-width:1100px) {
     .container {
         padding: 28px
+    }
+
+    .testi-card{
+        min-width:20.33%;
+        max-width:20.33%;
     }
 }
 
